@@ -1,41 +1,45 @@
-# {{PLUGIN_NAME}}
+# updater-terraform
 
-> Replace this description with what your SemRel plugin does.
+Updates a Terraform variable that stores the application version.
 
-This repository is based on the `SemRels/plugin-template` GitHub template and provides a clean starting point for provider, analyzer, generator, updater, or hook plugins.
-
-## Repository Layout
-
-```text
-cmd/plugin/              Plugin entry point
-internal/plugin/         Business logic scaffold
-internal/grpc/           gRPC transport scaffold
-proto/v1                 Symlink to the SemRel protobuf contract
-.github/workflows/       CI, release, and security automation
-```
+This plugin is distributed as the standalone Go binary `semrel-plugin-updater-terraform`. Semrel executes the binary as a subprocess, provides plugin configuration through `SEMREL_PLUGIN_*` environment variables, provides release context through `SEMREL_*` environment variables, reads standard output, and treats exit code `0` as success and any non-zero exit code as failure. Install the binary in `~/.semrel/plugins/` or anywhere on your `$PATH`.
 
 ## Installation
 
-Published binaries are distributed through releases and synchronized to `registry.semrel.io`.
-
-## Development
-
 ```bash
-go build ./cmd/plugin
-go test ./...
+go install github.com/SemRels/updater-terraform/cmd/plugin@latest
 ```
 
 ## Configuration
 
-See the SemRel documentation for plugin configuration and runtime integration details:
+```yaml
+plugins:
+  - name: updater-terraform
+    path: ~/.semrel/plugins/semrel-plugin-updater-terraform
+    env:
+      SEMREL_PLUGIN_FILE: "variables.tf"
+      SEMREL_PLUGIN_VARIABLE: "app_version"
+```
 
-- https://github.com/SemRels/semrel
-- https://registry.semrel.io
+## `SEMREL_PLUGIN_*` variables
 
-## Next Steps
+| Name | Required | Description | Default |
+| --- | --- | --- | --- |
+| `SEMREL_PLUGIN_FILE` | Optional | Path to the Terraform file to update. | variables.tf |
+| `SEMREL_PLUGIN_VARIABLE` | Optional | Terraform variable name to update. | app_version |
 
-1. Replace all `{{...}}` placeholders.
-2. Rename the module path in `go.mod`.
-3. Implement your plugin logic in `internal/plugin/`.
-4. Wire generated protobuf bindings into `internal/grpc/`.
-5. Create your first tagged release with `v*.*.*`.
+## `SEMREL_*` release context used
+
+| Variable | Description |
+| --- | --- |
+| `SEMREL_VERSION` | Resolved release version for the current run. |
+| `SEMREL_NEXT_VERSION` | Next version computed by semrel for the release. |
+| `SEMREL_DRY_RUN` | Whether semrel is running in dry-run mode. |
+
+## Example behavior
+
+The plugin updates the default value of the configured Terraform variable to the new release version.
+
+## License
+
+Apache-2.0
