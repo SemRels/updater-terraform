@@ -1,6 +1,6 @@
 # updater-terraform
 
-[![Latest Release](https://img.shields.io/github/v/release/SemRels/updater-terraform?label=version\&color=blue)](https://github.com/SemRels/updater-terraform/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/SemRels/updater-terraform?label=version&color=blue)](https://github.com/SemRels/updater-terraform/releases/latest)
 
 Updates a Terraform variable that stores the application version.
 
