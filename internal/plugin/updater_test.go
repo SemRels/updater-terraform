@@ -14,7 +14,11 @@ func TestUpdaterUpdateTerraformFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(dir)
+	t.Cleanup(func() {
+		if err := os.RemoveAll(dir); err != nil {
+			t.Errorf("remove temporary directory: %v", err)
+		}
+	})
 
 	file := filepath.Join(dir, "versions.tf")
 	if err := os.WriteFile(file, []byte("module \"x\" {\n  version = \"1.2.3\"\n}\n"), 0o644); err != nil {
@@ -50,7 +54,11 @@ func TestUpdaterMissingVersion(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(dir)
+	t.Cleanup(func() {
+		if err := os.RemoveAll(dir); err != nil {
+			t.Errorf("remove temporary directory: %v", err)
+		}
+	})
 
 	file := filepath.Join(dir, "versions.tf")
 	if err := os.WriteFile(file, []byte("terraform {}\n"), 0o644); err != nil {
