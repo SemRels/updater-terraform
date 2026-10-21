@@ -39,19 +39,21 @@ cosign verify ghcr.io/semrels/updater-terraform:latest \
 
 ```yaml
 plugins:
-  - name: updater-terraform
-    path: ~/.semrel/plugins/semrel-plugin-updater-terraform
-    env:
-      SEMREL_PLUGIN_FILE: "variables.tf"
-      SEMREL_PLUGIN_VARIABLE: "app_version"
+  - uses: "@semrel/updater-terraform"
+    phase: pre-tag
+    args:
+      file: "variables.tf"
+      variable: "app_version"
 ```
 
-## `SEMREL_PLUGIN_*` variables
+## Options
 
-| Name | Required | Description | Default |
-| --- | --- | --- | --- |
-| `SEMREL_PLUGIN_FILE` | Optional | Path to the Terraform file to update. | variables.tf |
-| `SEMREL_PLUGIN_VARIABLE` | Optional | Terraform variable name to update. | app_version |
+Every option can be set as an entry under `args` in `.semrel.yaml`. semrel passes each entry to the plugin as the environment variable shown in the table, so you can also set that variable directly (for example in your CI environment) instead of using `args`.
+
+| Argument | Environment variable | Required | Description | Default |
+| --- | --- | --- | --- | --- |
+| `file` | `SEMREL_PLUGIN_FILE` | Optional | Path to the Terraform file to update. | variables.tf |
+| `variable` | `SEMREL_PLUGIN_VARIABLE` | Optional | Terraform variable name to update. | app_version |
 
 ## `SEMREL_*` release context used
 
