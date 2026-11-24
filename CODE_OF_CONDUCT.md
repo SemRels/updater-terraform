@@ -1,6 +1,6 @@
 # Code of Conduct
 
-updater-terraform is committed to providing a welcoming and harassment-free community.
+`updater-terraform` is committed to providing a welcoming and harassment-free community.
 
 ## Our Pledge
 
